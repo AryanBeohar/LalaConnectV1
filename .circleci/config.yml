@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/openjdk:11-jdk # Use OpenJDK 11 image with Node pre-installed
     steps:
       - checkout
       - run:
@@ -11,15 +11,19 @@ jobs:
           command: |
             npm install  # or yarn install if you're using Yarn
       - run:
+          name: Set Up Environment Variables
+          command: |
+            echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64' >> $BASH_ENV
+            echo 'export PATH=$JAVA_HOME/bin:$PATH' >> $BASH_ENV
+      - run:
           name: Run Tests
           command: npm test -- --ci
           no_output_timeout: 20m # Increase timeout to 20 minutes
-
       - run:
           name: Build Android
           command: |
             cd android
-            ./gradlew assembleRelease # Adjust for iOS if need ed
+            ./gradlew assembleRelease # Adjust for iOS if needed
 
 workflows:
   version: 2
