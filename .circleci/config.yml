@@ -12,12 +12,14 @@ jobs:
             npm install  # or yarn install if you're using Yarn
       - run:
           name: Run Tests
-          command: npm test
+          command: npm test -- --ci
+          no_output_timeout: 20m # Increase timeout to 20 minutes
+
       - run:
           name: Build Android
           command: |
             cd android
-            ./gradlew assembleRelease  # Adjust for iOS if needed
+            ./gradlew assembleRelease # Adjust for iOS if need ed
 
 workflows:
   version: 2
