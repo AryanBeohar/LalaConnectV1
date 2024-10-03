@@ -6,8 +6,8 @@ node_modules/
 .expo-shared/
 
 # React Native specific
-ios/
-android/
+# ios/
+# android/
 
 # Build output
 dist/
