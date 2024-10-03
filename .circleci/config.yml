@@ -3,17 +3,21 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node:latest
-    environment:
-      JAVA_HOME: /usr/local/openjdk-17 # Set the correct Java path
-      ANDROID_HOME: /opt/android/sdk # Set Android SDK environment
-      PATH: $PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools # Update PATH for Android tools
+      - image: circleci/node:18 # Use Node.js image
     steps:
       - checkout
       - run:
-          name: Install Dependencies
+          name: Install Android SDK
           command: |
-            npm install  # Install Node dependencies
+            curl -o sdk-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-8031010_latest.zip
+            unzip sdk-tools.zip -d $HOME/Library/Android/sdk/cmdline-tools
+            rm sdk-tools.zip
+            yes | $HOME/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager --sdk_root=$HOME/Library/Android/sdk --install "platform-tools" "platforms;android-30"
+            yes | $HOME/Library/Android/sdk/cmdline-tools/tools/bin/sdkmanager --licenses
+
+      - run:
+          name: Install Dependencies
+          command: npm install # Install Node dependencies
 
       - run:
           name: Run Tests
