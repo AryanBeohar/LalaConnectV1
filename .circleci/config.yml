@@ -3,8 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      docker:
-        - image: circleci/node:latest
+      - image: circleci/node:latest # Correctly define the Docker image
     environment:
       JAVA_HOME: /usr/local/openjdk-11 # Set the correct Java path
       ANDROID_HOME: /opt/android/sdk # Set Android SDK environment
@@ -24,7 +23,8 @@ jobs:
           name: Build Android
           command: |
             cd android
-            ./gradlew assembleRelease # Adjust for iOS if need ed
+            chmod +x gradlew # Make sure gradlew is executable
+            ./gradlew assembleRelease # Adjust for iOS if needed
 
 workflows:
   version: 2
