@@ -3,16 +3,17 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/node:latest # Correctly define the Docker image
+      - image: circleci/openjdk:17 # Use OpenJDK 17 Docker image
     environment:
-      JAVA_HOME: /usr/local/openjdk-11 # Set the correct Java path
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk # Set to the correct Java path for the CircleCI OpenJDK image
       ANDROID_HOME: /opt/android/sdk # Set Android SDK environment
+      PATH: $PATH:$ANDROID_HOME/emulator:$ANDROID_HOME/platform-tools # Update PATH for Android tools
     steps:
       - checkout
       - run:
           name: Install Dependencies
           command: |
-            npm install  # or yarn install if you're using Yarn
+            npm install  # Install Node dependencies
 
       - run:
           name: Run Tests
@@ -23,8 +24,8 @@ jobs:
           name: Build Android
           command: |
             cd android
-            chmod +x gradlew # Make sure gradlew is executable
-            ./gradlew assembleRelease # Adjust for iOS if needed
+            chmod +x gradlew # Ensure gradlew is executable
+            ./gradlew assembleRelease # Build the Android app
 
 workflows:
   version: 2
