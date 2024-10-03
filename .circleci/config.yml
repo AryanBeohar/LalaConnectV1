@@ -3,13 +3,14 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/openjdk:11-jdk # Use OpenJDK 11 image with Node pre-installed
+      - image: circleci/node:latest
     steps:
       - checkout
       - run:
           name: Install Dependencies
           command: |
             npm install  # or yarn install if you're using Yarn
+
       - run:
           name: Set Up Environment Variables
           command: |
@@ -19,11 +20,12 @@ jobs:
           name: Run Tests
           command: npm test -- --ci
           no_output_timeout: 20m # Increase timeout to 20 minutes
+
       - run:
           name: Build Android
           command: |
             cd android
-            ./gradlew assembleRelease # Adjust for iOS if needed
+            ./gradlew assembleRelease # Adjust for iOS if need ed
 
 workflows:
   version: 2
